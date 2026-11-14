@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cilaa Makeup Artist - Booking di Barru</title>
+<meta name="theme-color" content="#E88CA0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cilaa Makeup">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<style>
+*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+body{margin:0;background:#FFF5F7;color:#333;padding-bottom:90px}
+header{background:linear-gradient(135deg,#E88CA0,#F7B8C4);color:white;padding:28px 20px 20px;text-align:center;border-radius:0 0 24px 24px}
+header h1{margin:6px 0 2px;font-size:24px}
+header p{margin:0;opacity:.95;font-size:14px}
+.avatar{width:90px;height:90px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.btns{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.btns a{background:white;color:#D45A78;padding:9px 14px;border-radius:20px;text-decoration:none;font-weight:700;font-size:13px}
+.card{background:white;margin:14px;border-radius:18px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+h2{font-size:17px;margin:0 0 10px;color:#D45A78}
+input,select,textarea{width:100%;padding:11px;border:1px solid #F0C9D2;border-radius:12px;margin-bottom:9px;font-size:14px;background:#FFF9FA}
+button{width:100%;background:#E88CA0;color:white;border:0;padding:12px;border-radius:12px;font-weight:800;font-size:15px}
+button:active{transform:scale(.98)}
+.item{border:1px solid #FCE3E8;border-radius:12px;padding:11px;margin-bottom:8px;background:#FFFBFC}
+.item b{display:block}
+.small{font-size:12px;color:#888}
+.badge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700}
+.yellow{background:#FFF3CD}.green{background:#D4EDDA}.red{background:#F8D7DA}.blue{background:#D1ECF1}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;border-top:1px solid #eee;padding:8px 0 calc(8px + env(safe-area-inset-bottom));overflow-x:auto}
+nav button{background:none;color:#999;font-size:11px;padding:6px;min-width:60px}
+nav button.active{color:#E88CA0}
+nav button span{display:block;font-size:20px}
+.hidden{display:none}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.total{font-size:22px;font-weight:900;color:#D45A78;text-align:center}
+.price{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed #eee}
+.inv{border:1px solid #F0C9D2;border-radius:16px;padding:16px;background:#FFFBFC}
+.inv-head{display:flex;justify-content:space-between}
+.inv-table{width:100%;font-size:13px;margin-top:12px;border-collapse:collapse}
+.inv-table td{padding:6px 0;border-top:1px dashed #eee}
+.inv-total{color:#D45A78;font-weight:800}
+</style>
+</head>
+<body>
+<header>
+<div class="avatar">🐱💄</div>
+<h1>cilaa_makeupmakeup</h1>
+<p>Doing what I love. 💄 • Barru</p>
+<div class="btns">
+<a href="https://instagram.com/cilaa_makeupmakeup" target="_blank">📸 Instagram</a>
+<a href="https://wa.me/6281234567890" target="_blank">💬 WhatsApp</a>
+<a href="#" onclick="show('pricelist');return false">💰 Pricelist</a>
+</div>
+</header>
+
+<div id="page-home">
+<div class="card"><h2>✨ Selamat Datang, Cilaa!</h2><p class="small">Semua booking, klien & keuangan ada di sini.</p><div class="total" id="homeTotal">Rp 0</div><p style="text-align:center" class="small">Total Bersih Bulan Ini</p></div>
+<div class="card"><h2>📅 Booking Hari Ini</h2><div id="todayList"><p class="small">Belum ada booking hari ini.</p></div></div>
+</div>
+
+<div id="page-klien" class="hidden"><div class="card"><h2>👩‍🦰 Tambah Klien</h2><input id="kNama" placeholder="Nama Klien"><input id="kWa" placeholder="WhatsApp 08xx"><input id="kRiwayat" placeholder="Riwayat: Wisuda - 12 Okt 2026"><textarea id="kCatatan" placeholder="Catatan: alergi, tidak suka bulu mata tebal..."></textarea><button onclick="addKlien()">Simpan Klien</button></div><div class="card"><h2>📋 Daftar Klien</h2><div id="klienList"></div></div></div>
+
+<div id="page-booking" class="hidden"><div class="card"><h2>📝 Booking Baru</h2><input id="bNama" placeholder="Nama Klien"><input id="bTanggal" type="date"><input id="bJam" type="time" value="07:00"><select id="bJenis"><option>Wisuda</option><option>Party</option><option>Wedding</option><option>Prewed</option><option>Photoshoot</option></select><select id="bLokasi"><option>Studio</option><option>Rumah Klien</option></select><select id="bStatus"><option>Menunggu DP</option><option>DP Masuk</option><option>Lunas</option><option>Selesai</option><option>Cancel</option></select><input id="bHarga" type="number" placeholder="Harga Rp - contoh 250000"><button onclick="addBooking()">Simpan Booking</button></div><div class="card"><h2>📋 Semua Booking</h2><div id="bookingList"></div></div></div>
+
+<div id="page-kalender" class="hidden"><div class="card"><h2>📆 Kalender</h2><p class="small"><span class="badge yellow">Kuning = Menunggu DP</span> <span class="badge green">Hijau = DP / Lunas</span> <span class="badge red">Merah = Cancel</span></p><input id="calDate" type="date" onchange="renderCal()"><div id="calList"></div></div></div>
+
+<div id="page-keuangan" class="hidden"><div class="card"><h2>💰 Keuangan</h2><div class="row"><input id="uKet" placeholder="Keterangan: DP Nur Aisyah"><input id="uNominal" type="number" placeholder="Rp"></div><div class="row"><button onclick="addUang('masuk')">+ Pemasukan</button><button style="background:#888" onclick="addUang('keluar')">- Pengeluaran</button></div></div><div class="card"><div class="total" id="keuTotal">Rp 0</div><div id="keuList"></div></div></div>
+
+<div id="page-pricelist" class="hidden"><div class="card"><h2>💰 Pricelist</h2><p class="small">Klik harga untuk ubah.</p><div id="priceList"></div><input id="pNama" placeholder="Nama layanan baru"><input id="pHarga" type="number" placeholder="Harga Rp"><button onclick="addPrice()">+ Tambah Layanan</button></div></div>
+
+<div id="page-invoice" class="hidden">
+<div class="card"><h2>🧾 Buat Invoice</h2>
+<input id="iNama" placeholder="Nama Klien - contoh Prawed Nurul Fat">
+<input id="iLayanan" placeholder="Layanan - contoh Makeup Prawed">
+<input id="iTanggal" type="date">
+<div class="row"><input id="iHarga" type="number" placeholder="Harga Rp 500000"><input id="iDiskon" type="number" placeholder="Diskon Rp 0"></div>
+<div class="row"><input id="iDP" type="number" placeholder="DP / Dibayar Rp"><input id="iWa" placeholder="WA Klien 08xx"></div>
+<button onclick="buatInvoice()">Buat Invoice</button>
+</div>
+<div class="card"><h2>👀 Preview Invoice</h2><div id="invPreview"><p class="small">Isi dulu di atas, lalu tekan Buat Invoice.</p></div></div>
+</div>
+
+<nav>
+<button class="active" onclick="show('home',this)"><span>🏠</span>Home</button>
+<button onclick="show('klien',this)"><span>👩‍🦰</span>Klien</button>
+<button onclick="show('booking',this)"><span>📝</span>Booking</button>
+<button onclick="show('kalender',this)"><span>📆</span>Kalender</button>
+<button onclick="show('keuangan',this)"><span>💰</span>Keuangan</button>
+<button onclick="show('pricelist',this)"><span>💄</span>Harga</button>
+<button onclick="show('invoice',this)"><span>🧾</span>Invoice</button>
+</nav>
+
+<script>
+let klien=JSON.parse(localStorage.getItem('cilaa_klien')||'[]');
+let booking=JSON.parse(localStorage.getItem('cilaa_booking')||'[]');
+let keu=JSON.parse(localStorage.getItem('cilaa_keu')||'[]');
+let prices=JSON.parse(localStorage.getItem('cilaa_prices')||'[{"n":"Makeup Party","h":150000,"d":"Softlens + bulu mata"},{"n":"Makeup Wisuda","h":250000,"d":"Softlens + bulu mata + hairdo simpel"},{"n":"Makeup Wedding","h":750000,"d":"Hairdo + softlens + bulu mata + touch up"},{"n":"Makeup Prewed","h":350000,"d":"1 look"},{"n":"Makeup Photoshoot","h":300000,"d":"1 look"}]');
+let lastInv=null;
+function save(){localStorage.setItem('cilaa_klien',JSON.stringify(klien));localStorage.setItem('cilaa_booking',JSON.stringify(booking));localStorage.setItem('cilaa_keu',JSON.stringify(keu));localStorage.setItem('cilaa_prices',JSON.stringify(prices));render();}
+function show(p,el){['home','klien','booking','kalender','keuangan','pricelist','invoice'].forEach(x=>document.getElementById('page-'+x).classList.add('hidden'));document.getElementById('page-'+p).classList.remove('hidden');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');window.scrollTo(0,0);}
+function rp(n){return 'Rp '+Number(n||0).toLocaleString('id-ID')}
+function addKlien(){if(!kNama.value)return alert('Isi nama dulu');klien.unshift({n:kNama.value,w:kWa.value,r:kRiwayat.value,c:kCatatan.value});kNama.value=kWa.value=kRiwayat.value=kCatatan.value='';save();alert('Klien tersimpan!')}
+function addBooking(){if(!bNama.value||!bTanggal.value)return alert('Isi nama & tanggal');booking.unshift({n:bNama.value,t:bTanggal.value,j:bJam.value,jenis:bJenis.value,l:bLokasi.value,s:bStatus.value,h:bHarga.value||0});save();alert('Booking tersimpan!')}
+function addUang(t){if(!uKet.value||!uNominal.value)return alert('Isi keterangan & nominal');keu.unshift({k:uKet.value,n:uNominal.value,t});uKet.value=uNominal.value='';save();}
+function addPrice(){if(!pNama.value)return alert('Isi nama');prices.push({n:pNama.value,h:pHarga.value||0,d:'-'});pNama.value=pHarga.value='';save();}
+function del(arr,i){if(confirm('Hapus?')){arr.splice(i,1);save();}}
+function render(){
+klienList.innerHTML=klien.map((x,i)=>`<div class="item"><b></b><span class="small">WA:  • </span><br><span class="small"></span><br><a href="#" onclick="del(klien,)">Hapus</a></div>`).join('')||'<p class="small">Belum ada klien.</p>';
+bookingList.innerHTML=booking.map((x,i)=>`<div class="item"><b> - </b><span class="small"> jam  •  • </span><br><span class="badge x.s.includes('Cancel')?'red':'green'"></span> <a href="#" onclick="del(booking,)">Hapus</a></div>`).join('')||'<p class="small">Belum ada booking.</p>';
+let today=new Date().toISOString().slice(0,10);let tod=booking.filter(x=>x.t===today);todayList.innerHTML=tod.map(x=>`<div class="item"><b> - </b><br><span class="small"> •  • </span></div>`).join('')||'<p class="small">Belum ada booking hari ini.</p>';
+let total=keu.reduce((a,x)=>a+(x.t==='masuk'?Number(x.n):-Number(x.n)),0);keuTotal.textContent=rp(total);homeTotal.textContent=rp(total);
+keuList.innerHTML=keu.map((x,i)=>`<div class="item"><b>'-'  - </b> <a href="#" onclick="del(keu,)">Hapus</a></div>`).join('')||'';
+priceList.innerHTML=prices.map((x,i)=>`<div class="price"><span><b></b><br><span class="small"></span></span><b></b> <a href="#" onclick="del(prices,)">x</a></div>`).join('');
+renderCal();
+}
+function renderCal(){let d=calDate.value||new Date().toISOString().slice(0,10);let list=booking.filter(x=>x.t===d);calList.innerHTML=list.map(x=>`<div class="item"><b> - </b><br><span class="small"> • </span></div>`).join('')||'<p class="small">Tanggal ini kosong, bisa dibooking ✨</p>';}
+function buatInvoice(){
+if(!iNama.value||!iHarga.value)return alert('Isi nama & harga dulu');
+let harga=Number(iHarga.value||0), diskon=Number(iDiskon.value||0), dp=Number(iDP.value||0);
+let total=harga-diskon, sisa=total-dp;
+let no='INV-'+new Date().getFullYear()+'-'+Math.floor(100000+Math.random()*900000);
+let tgl=iTanggal.value||new Date().toISOString().slice(0,10);
+lastInv={no,nama:iNama.value,layanan:iLayanan.value||'Makeup',tgl,harga,diskon,total,dp,sisa,wa:iWa.value};
+invPreview.innerHTML=`<div class="inv"><div class="inv-head"><div><b style="color:#D45A78">Cilaa Makeup</b><br><span class="small">Barru • cilaa_makeupmakeup</span></div><div style="text-align:right"><b>INVOICE</b><br><span class="small"><br></span></div></div><p class="small" style="margin-top:14px">DITUJUKAN KEPADA</p><b></b><table class="inv-table"><tr><td>DESKRIPSI</td><td style="text-align:right">HARGA</td></tr><tr><td></td><td style="text-align:right"></td></tr><tr><td>Subtotal</td><td style="text-align:right"></td></tr><tr><td>Diskon</td><td style="text-align:right">- </td></tr><tr><td class="inv-total">Total</td><td class="inv-total" style="text-align:right"></td></tr><tr><td>DP / Dibayar</td><td style="text-align:right"></td></tr><tr><td><b>Sisa Pembayaran</b></td><td style="text-align:right"><b></b></td></tr></table><button onclick="kirimWA()" style="margin-top:12px">💬 Kirim ke WA Klien</button><button onclick="window.print()" style="margin-top:8px;background:white;color:#D45A78;border:1px solid #E88CA0">🖨️ Print / Simpan PDF</button></div>`;
+}
+function kirimWA(){
+if(!lastInv)return alert('Buat invoice dulu');
+let pesan=`Halo  💄%0A%0AInvoice Cilaa Makeup%0A - %0A : %0ADiskon : %0ATotal : %0ADP : %0ASisa : %0A%0ATerima kasih sudah booking di Cilaa Makeup ✨`;
+let nomor=(lastInv.wa||'').replace(/[^0-9]/g,''); if(nomor.startsWith('0')) nomor='62'+nomor.slice(1);
+window.open('https://wa.me/'+(nomor||'6281234567890')+'?text='+pesan,'_blank');
+}
+if(!calDate.value)calDate.value=new Date().toISOString().slice(0,10);if(!bTanggal.value)bTanggal.value=new Date().toISOString().slice(0,10);if(!iTanggal.value)iTanggal.value=new Date().toISOString().slice(0,10);
+render();
+</script>
+</body>
+</html>
